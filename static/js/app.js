@@ -31,7 +31,7 @@ function optionChanged(bbID) {
     });
 
     filteredbyparams.forEach((belly) => {
-        console.log(belly);
+        // console.log(belly);
 
         var DemoInfo = d3.select('#sample-metadata');
         DemoInfo.selectAll("table").remove();
@@ -59,9 +59,14 @@ function optionChanged(bbID) {
     });
 
     filteredbyparams2.forEach((bellys) => {
-        console.log(bellys.sample_values);
-        console.log(bellys.otu_ids);
+        // console.log(bellys.sample_values);
+        // console.log(bellys.otu_ids);
+        console.log(bellys.otu_labels.slice(0, 10));
+        var otu_labels_t=bellys.otu_labels.slice(0, 10);
 
+        for(var i=0; i < otu_labels_t.length; i++) {
+            otu_labels_t[i] = otu_labels_t[i].replace(/;/g, '<br>');
+           }
 
         // bar chart
         var trace = {
@@ -71,7 +76,7 @@ function optionChanged(bbID) {
             },
             x: bellys.sample_values.slice(0, 10),
             y: bellys.otu_ids.slice(0, 10),
-            hovertext: bellys.otu_labels.slice(0, 10),
+            hovertext: otu_labels_t,
             width: 20,
             orientation: 'h'
         };
@@ -133,7 +138,7 @@ function optionChanged(bbID) {
 
         // NaN or null to 0
             wfreq = wfreq || 0;
-            console.log(`wash freq: ${wfreq}`);
+            // console.log(`wash freq: ${wfreq}`);
         });
 
         var data = [
