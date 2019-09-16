@@ -1,7 +1,7 @@
 var GBBData;
 // load JSON data
 // console.log('app start')
-d3.json("/static/data/samples.json").then((BBData) => {
+d3.json("static/data/samples.json").then((BBData) => {
     // console.log("fetched")
 
     GBBData = BBData;
