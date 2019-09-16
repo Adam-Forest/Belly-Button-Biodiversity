@@ -1,9 +1,12 @@
+// make global var to pass data around (there is probably a safer way to do this)
 var GBBData;
+
 // load JSON data
 // console.log('app start')
 d3.json("static/data/samples.json").then((BBData) => {
     // console.log("fetched")
 
+    // for data access outside this function
     GBBData = BBData;
 
     // populate select dropdown
@@ -19,11 +22,12 @@ d3.json("static/data/samples.json").then((BBData) => {
 
 });
 
-// populate dashboard when id is selected
+// populate dashboard when id is selected listen for change on dropdown
 function optionChanged(bbID) {
     // console.log(bbID);
     // console.log(GBBData)
 
+    // grab metadata section corresponding to id selected via filter
     var filteredbyparams = GBBData.metadata.filter(function (belly) {
         if ((parseInt(belly.id) === parseInt(bbID))) {
             return belly;
@@ -33,6 +37,7 @@ function optionChanged(bbID) {
     filteredbyparams.forEach((belly) => {
         // console.log(belly);
 
+        // Create and populate table with meta data of selected ID
         var DemoInfo = d3.select('#sample-metadata');
         DemoInfo.selectAll("table").remove();
 
@@ -43,6 +48,7 @@ function optionChanged(bbID) {
         var table_h_bb = table_bb
             .append('tbody');
 
+        // Loop through object to get key value pairs to display as meta data
         Object.entries(belly).forEach(([key, value]) => {
             var bb_row = table_h_bb.append("tr");
             var bb_cell = bb_row.append("td").text(key.toUpperCase());
@@ -51,7 +57,7 @@ function optionChanged(bbID) {
 
     });
 
-
+    // grab samples section corresponding to id selected via filter
     filteredbyparams2 = GBBData.samples.filter(function (bellys) {
         if ((parseInt(bellys.id) === parseInt(bbID))) {
             return bellys;
@@ -61,18 +67,20 @@ function optionChanged(bbID) {
     filteredbyparams2.forEach((bellys) => {
         // console.log(bellys.sample_values);
         // console.log(bellys.otu_ids);
-        console.log(bellys.otu_labels.slice(0, 10));
-        var otu_labels_t=bellys.otu_labels.slice(0, 10);
+        // console.log(bellys.otu_labels.slice(0, 10));
 
-        for(var i=0; i < otu_labels_t.length; i++) {
+        // clean up labels for hover text, replace ; with <br>
+        var otu_labels_t = bellys.otu_labels.slice(0, 10);
+
+        for (var i = 0; i < otu_labels_t.length; i++) {
             otu_labels_t[i] = otu_labels_t[i].replace(/;/g, '<br>');
-           }
+        }
 
-        // bar chart
+        // create bar chart
         var trace = {
             type: 'bar',
-            marker:{
-            color: 'rgb(139,0,139)'
+            marker: {
+                color: 'rgb(139,0,139)'
             },
             x: bellys.sample_values.slice(0, 10),
             y: bellys.otu_ids.slice(0, 10),
@@ -86,29 +94,29 @@ function optionChanged(bbID) {
             title: 'Top 10 OTUs Found in Sample',
             xaxis: {
                 title: {
-                  text: 'OTUs Found',
-                  font: {
-                    size: 18,
-                    color: '#7f7f7f'
-                  }
+                    text: 'OTUs Found',
+                    font: {
+                        size: 18,
+                        color: '#7f7f7f'
+                    }
                 },
-              },
-              yaxis: {
+            },
+            yaxis: {
                 title: {
-                  text: 'OTU ID',
-                  font: {
-                    size: 18,
-                    color: '#7f7f7f'
-                  }
+                    text: 'OTU ID',
+                    font: {
+                        size: 18,
+                        color: '#7f7f7f'
+                    }
                 }
-              }
+            }
         };
 
         Plotly.newPlot('bar', data, layout);
 
         // bubble chart
-        var bubble_color=bellys.otu_ids;
-        bubble_color = bubble_color.map(function(val){return val;});
+        var bubble_color = bellys.otu_ids;
+        bubble_color = bubble_color.map(function (val) { return val; });
 
         var trace1 = {
             x: bellys.otu_ids,
@@ -136,11 +144,12 @@ function optionChanged(bbID) {
         filteredbyparams.forEach((belly) => {
             wfreq = parseInt(belly.wfreq);
 
-        // NaN or null to 0
+            // NaN or null to 0
             wfreq = wfreq || 0;
             // console.log(`wash freq: ${wfreq}`);
         });
 
+        // Create gauge chart, no idea how to make a needle indicator other than maybe a custom svg
         var data = [
             {
                 value: wfreq,
@@ -157,12 +166,11 @@ function optionChanged(bbID) {
             }
         ];
 
-var layout = {};
+        var layout = {};
 
+        Plotly.newPlot('gauge', data, layout);
 
-Plotly.newPlot('gauge', data, layout);
-
-});
+    });
 
 
 
