@@ -62,21 +62,46 @@ function optionChanged(bbID) {
         console.log(bellys.sample_values);
         console.log(bellys.otu_ids);
 
+
+        // bar chart
         var trace = {
             type: 'bar',
             marker:{
             color: 'rgb(139,0,139)'
             },
-            x: bellys.sample_values,
-            y: bellys.otu_ids,
-            hovertext: bellys.otu_labels,
+            x: bellys.sample_values.slice(0, 10),
+            y: bellys.otu_ids.slice(0, 10),
+            hovertext: bellys.otu_labels.slice(0, 10),
             width: 20,
             orientation: 'h'
         };
 
         var data = [trace];
+        var layout = {
+            title: 'Top 10 OTUs Found in Sample',
+            xaxis: {
+                title: {
+                  text: 'OTUs Found',
+                  font: {
+                    size: 18,
+                    color: '#7f7f7f'
+                  }
+                },
+              },
+              yaxis: {
+                title: {
+                  text: 'OTU ID',
+                  font: {
+                    size: 18,
+                    color: '#7f7f7f'
+                  }
+                }
+              }
+        };
 
-        Plotly.newPlot('bar', data);
+        Plotly.newPlot('bar', data, layout);
+
+        // bubble chart
         var bubble_color=bellys.otu_ids;
         bubble_color = bubble_color.map(function(val){return val;});
 
