@@ -115,7 +115,7 @@ function optionChanged(bbID) {
             transforms: [{
                 type: 'sort',
                 target: 'x',
-                order: 'descending'
+                order: 'dascending'
               }],
             hovertext: bol,
             orientation: 'h'
