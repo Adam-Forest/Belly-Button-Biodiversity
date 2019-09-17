@@ -145,7 +145,7 @@ function optionChanged(bbID) {
             }
         };
 
-        Plotly.newPlot('bar', data, layout);
+        Plotly.react('bar', data, layout);
 
         // bubble chart
         var bubble_color = bellys.otu_ids;
@@ -168,7 +168,7 @@ function optionChanged(bbID) {
             title: 'Belly Button Biodiversity',
         };
 
-        Plotly.newPlot('bubble', data, layout);
+        Plotly.react('bubble', data, layout);
 
         // variable to collect wash frequency
         var wfreq;
@@ -201,7 +201,7 @@ function optionChanged(bbID) {
 
         var layout = {};
 
-        Plotly.newPlot('gauge', data, layout);
+        Plotly.react('gauge', data, layout);
 
     });
 
