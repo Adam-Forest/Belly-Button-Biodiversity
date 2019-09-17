@@ -72,9 +72,9 @@ function optionChanged(bbID) {
  
 
         // data is sorted, but what if its not
-        var bsv = bellys.sample_values;
-        var boid = bellys.otu_ids;
-        var bol = bellys.otu_labels;
+        var bsv = bellys.sample_values.slice(0);
+        var boid = bellys.otu_ids.slice(0);
+        var bol = bellys.otu_labels.slice(0);
 
         // combine the arrays for sorting
         var list = [];
@@ -93,6 +93,7 @@ function optionChanged(bbID) {
         for (var k = 0; k < list.length; k++) {
             bsv[k] = list[k].bsv;
             boid[k] = `id:${list[k].boid.toString()}`;
+            console.log(bellys.otu_ids)
             bol[k] = list[k].bol;
         }
 
@@ -102,8 +103,7 @@ function optionChanged(bbID) {
         for (var i = 0; i < bol.length; i++) {
             bol[i] = bol[i].replace(/;/g, '<br>');
         }
-        console.log(`x:bsv-${bsv.slice(0, 10)}`);
-        console.log(`y:boid-${boid.slice(0, 10)}`);
+
         // create bar chart
         var trace = {
             type: 'bar',
