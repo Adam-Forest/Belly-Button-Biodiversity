@@ -69,11 +69,38 @@ function optionChanged(bbID) {
         // console.log(bellys.otu_ids);
         // console.log(bellys.otu_labels.slice(0, 10));
 
-        // clean up labels for hover text, replace ; with <br>
-        var otu_labels_t = bellys.otu_labels.slice(0, 10);
+ 
 
-        for (var i = 0; i < otu_labels_t.length; i++) {
-            otu_labels_t[i] = otu_labels_t[i].replace(/;/g, '<br>');
+        // data is sorted, but what if its not
+        var bsv = bellys.sample_values;
+        var boid = bellys.otu_ids;
+        var bol = bellys.otu_labels;
+
+        // combine the arrays for sorting
+        var list = [];
+        for (var j = 0; j < boid.length; j++)
+            list.push({ 'bsv': bsv[j], 'boid': boid[j], 'bol': bol[j] });
+        
+        // console.log(list);
+        // sort descending by sample value
+        list.sort(function(a, b) {
+            return ((a.bsv > b.bsv) ? -1 : ((a.bsv == bsv.name) ? 0 : 1));
+        });
+
+        // console.log(list);
+
+        // put sorted data back
+        for (var k = 0; k < list.length; k++) {
+            bsv[k] = list[k].bsv;
+            boid[k] = list[k].boid;
+            bol[k] = list[k].bol;
+        }
+
+        // clean up labels for hover text, replace ; with <br>
+        var bol = bol.slice(0, 10);
+
+        for (var i = 0; i < bol.length; i++) {
+            bol[i] = bol[i].replace(/;/g, '<br>');
         }
 
         // create bar chart
@@ -82,9 +109,9 @@ function optionChanged(bbID) {
             marker: {
                 color: 'rgb(139,0,139)'
             },
-            x: bellys.sample_values.slice(0, 10),
-            y: bellys.otu_ids.slice(0, 10),
-            hovertext: otu_labels_t,
+            x: bsv.slice(0, 10), //data is already sorted
+            y: boid.slice(0, 10),
+            hovertext: bol,
             width: 20,
             orientation: 'h'
         };
