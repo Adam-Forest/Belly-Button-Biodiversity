@@ -92,7 +92,7 @@ function optionChanged(bbID) {
         // put sorted data back
         for (var k = 0; k < list.length; k++) {
             bsv[k] = list[k].bsv;
-            boid[k] = list[k].boid;
+            boid[k] = `id:${list[k].boid.toString()}`;
             bol[k] = list[k].bol;
         }
 
@@ -102,19 +102,25 @@ function optionChanged(bbID) {
         for (var i = 0; i < bol.length; i++) {
             bol[i] = bol[i].replace(/;/g, '<br>');
         }
-
+        console.log(`x:bsv-${bsv.slice(0, 10)}`);
+        console.log(`y:boid-${boid.slice(0, 10)}`);
         // create bar chart
         var trace = {
             type: 'bar',
             marker: {
                 color: 'rgb(139,0,139)'
             },
-            x: bsv.slice(0, 10), //data is already sorted
+            x: bsv.slice(0, 10), 
             y: boid.slice(0, 10),
+            transforms: [{
+                type: 'sort',
+                target: 'x',
+                order: 'descending'
+              }],
             hovertext: bol,
-            width: 20,
             orientation: 'h'
         };
+
 
         var data = [trace];
         var layout = {
